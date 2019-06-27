@@ -1,0 +1,105 @@
+<html>
+  <head>
+
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+    <script>
+      const gridSize = 15;
+      const randomsOnTop = 30;
+      const refreshTime = 400;
+      const rainRefreshTime = 200;
+
+      let previousTime = 0;
+      let previousRainTime = 0;
+
+      let topRain;
+
+      let a, b;
+
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        background(255);
+
+        noStroke();
+        topRain = new rain(int((windowWidth/gridSize)));
+
+      }
+      function draw() {
+        // background
+        if(millis() > previousTime + refreshTime ){
+          for(var x = 0; x<windowWidth; x+=gridSize){
+            for(var y = 0; y<windowHeight; y+= gridSize){
+              fill(x*0.1+20, y*0.1+40, 120);
+              triangle(x, y, x + gridSize, y, x + gridSize, y + gridSize);
+              fill(x*0.1+cos(millis())*40, y*0.1+40, 120);
+              triangle(x, y, x + gridSize, y + gridSize, x, y + gridSize);
+            }
+          }
+          previousTime = millis();
+        }
+
+        //cloud from the right
+        fill(20,255,125, 1);
+        for (var i = 0; i < randomsOnTop; i++){
+          var anchorX = int(random(0, windowWidth/gridSize)) * gridSize;
+          var anchorY = int(random(0, windowWidth/gridSize)) * gridSize;
+          var size = int(random(0, 5));
+          if( random(0, 1) < 0.8 ) {
+            fill(20,55+cos(millis())*100,125, 1);
+          }else{
+            fill(100,55+cos(millis())*100,125, 1);
+          }
+          rect( anchorX, anchorY, anchorX+size, anchorY+size);
+        }
+        //Update rain
+        if(millis() > previousTime + rainRefreshTime ){
+          topRain.update();
+          topRain.draw();
+          previousRainTime = millis();
+        }
+
+      }
+
+      class drop {
+        constructor(xIndex) {
+          this.xIndex = xIndex;
+          this.yIndex = 0;
+        }
+        update(){
+          this.yIndex++;
+        }
+        draw(){
+          fill(255,100,100);
+          rect( this.xIndex*gridSize, this.yIndex*gridSize, gridSize, gridSize);
+
+        }
+      }
+
+      class rain{
+        constructor(size){
+          this.drops = [];
+          for(var i = 0; i<size;i++){
+            this.drops.push( new drop(i) );
+          }
+        }
+        update(){
+          for (var i = 0; i < this.drops.length; i++) {
+            this.drops[i].update();
+          }
+        }
+        draw(){
+          for (var i = 0; i < this.drops.length; i++) {
+            this.drops[i].draw();
+          }
+        }
+      }
+
+
+
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
