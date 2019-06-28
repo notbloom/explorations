@@ -1,0 +1,111 @@
+<html>
+  <head>
+
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+    <script>
+      const gridSize = 15;
+      const randomsOnTop = 30;
+      const refreshTime = 800;
+      const rainRefreshTime = 200;
+
+      let previousTime = 0;
+      let previousRainTime = 0;
+
+      let topRain;
+
+      let a, b;
+
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        background(157, 64, 121);
+        noStroke();
+      }
+
+      function horizon(hWidth, floorLevel){
+        rectMode(CORNERS);
+        for(var i=0; i<windowWidth; i+= hWidth){
+          var height = int(random(0, 6))*hWidth+hWidth*3;
+            rect(i, floorLevel - height, i+hWidth,floorLevel);
+        }
+      }
+
+
+      function drawBuilding(){
+        rectMode(CORNER);
+        fill(123, 54, 124);
+        var _width = int(random(1,8))*60;
+        var _height = 600;
+        var _windowSize = 5;
+
+        rect(windowWidth/2-_width/2, windowHeight/2-_height/2, _width, _height);
+
+        //let's do some windows
+        fill(157, 64, 121);
+        for(var i=_windowSize; i<_width-_windowSize*2; i+= _windowSize*2){
+          for(var j=_windowSize; j<_height-_windowSize*6; j+= _windowSize*3){
+            if(random()>0.5){
+              rect(windowWidth/2-_width/2 + i, windowHeight/2-_height/2+_windowSize +j, _windowSize, _windowSize );
+            }
+          }
+        }
+
+      }
+      function draw() {
+        if(millis() > previousTime + refreshTime ){
+          background(157, 64, 121);
+          // fill(31, 12, 83);
+          // horizon(25, windowHeight/2);
+          // fill(100, 24, 81);
+          // horizon(50, windowHeight/2+75);
+          drawBuilding();
+          previousTime = millis();
+        }
+        //
+        // //cloud from the right
+        // fill(20,255,125, 1);
+        // for (var i = 0; i < randomsOnTop; i++){
+        //   var anchorX = int(random(0, windowWidth/gridSize)) * gridSize;
+        //   var anchorY = int(random(0, windowWidth/gridSize)) * gridSize;
+        //   var size = int(random(0, 5));
+        //   if( random(0, 1) < 0.8 ) {
+        //     fill(20,55+cos(millis())*100,125, 1);
+        //   }else{
+        //     fill(100,55+cos(millis())*100,125, 1);
+        //   }
+        //   rect( anchorX, anchorY, anchorX+size, anchorY+size);
+        // }
+        // //Update rain
+        // if(millis() > previousTime + rainRefreshTime ){
+        //   topRain.update();
+        //   topRain.draw();
+        //   previousRainTime = millis();
+        // }
+
+      }
+
+      // class building {
+      //   constructor(width, height) {
+      //     this.xIndex = xIndex;
+      //     this.yIndex = 0;
+      //   }
+      //   update(){
+      //     this.yIndex++;
+      //   }
+      //   draw(){
+      //     fill(255,100,100);
+      //     rect( this.xIndex*gridSize, this.yIndex*gridSize, gridSize, gridSize);
+      //
+      //   }
+      // }
+
+
+
+
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
