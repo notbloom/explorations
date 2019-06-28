@@ -14,13 +14,13 @@
 
       let topRain;
 
-      let a, b;
-
+      let bbb;
 
       function setup() {
         createCanvas(windowWidth, windowHeight);
         background(157, 64, 121);
         noStroke();
+        bbb = new building();
       }
 
       function horizon(hWidth, floorLevel){
@@ -32,36 +32,102 @@
       }
 
 
-      function drawBuilding(){
-        rectMode(CORNER);
-        fill(123, 54, 124);
-        var _width = int(random(1,8))*60;
-        var _height = 600;
-        var _windowSize = 5;
 
-        rect(windowWidth/2-_width/2, windowHeight/2-_height/2, _width, _height);
-
-        //let's do some windows
-        fill(157, 64, 121);
-        for(var i=_windowSize; i<_width-_windowSize*2; i+= _windowSize*2){
-          for(var j=_windowSize; j<_height-_windowSize*6; j+= _windowSize*3){
-            if(random()>0.5){
-              rect(windowWidth/2-_width/2 + i, windowHeight/2-_height/2+_windowSize +j, _windowSize, _windowSize );
+      class building{
+        constructor(){
+          this.reroll();
+        }
+        reroll(){
+          this._width = int(random(1,8))*60;
+          this._height = 600;
+          this._windowSize = 5;
+        }
+        draw(){
+          rectMode(CORNER);
+          fill(123, 54, 124);
+          rect(windowWidth/2-this._width/2, windowHeight/2-this._height/2, this._width, this._height);
+          //let's try the right side of the building
+          fill(113, 44, 114);
+          quad(windowWidth/2+this._width/2, windowHeight/2-this._height/2,
+              windowWidth/2+this._width/2 + 5, windowHeight/2-this._height/2+20,
+              windowWidth/2+this._width/2 + 5, windowHeight/2+this._height/2-20,
+              windowWidth/2+this._width/2, windowHeight/2+this._height/2,
+          );
+          //let's do some windows
+          fill(157, 64, 121);
+          for(var i=this._windowSize; i<this._width-this._windowSize*2; i+= this._windowSize*2){
+            for(var j=this._windowSize; j<this._height-this._windowSize*6; j+= this._windowSize*3){
+              if(noise((i+j)/100)>0.3){
+                rect(windowWidth/2-this._width/2 + i, windowHeight/2-this._height/2+this._windowSize +j, this._windowSize, this._windowSize );
+              }
             }
           }
         }
+      }
+
+
+
+      function drawMountain(){
+        fill(113, 54, 114);
+        beginShape();
+
+        var maxHeight = windowHeight/2 -200;
+
+        vertex(-10, windowHeight/2);
+        vertex(-10,  maxHeight);
+        for (var x=0; x<windowWidth; x += 40 ){
+          vertex(x, noise(x/100 + millis()/1000)*40 + maxHeight);
+        }
+        vertex(windowWidth+10,  maxHeight);
+        vertex(windowWidth+10,  windowHeight/2);
+        endShape(CLOSE);
 
       }
+
+      // function drawBuilding(){
+      //   rectMode(CORNER);
+      //
+      //   var _width = int(random(1,8))*60;
+      //   var _height = 600;
+      //   var _windowSize = 5;
+      //
+      //   fill(123, 54, 124);
+      //   rect(windowWidth/2-_width/2, windowHeight/2-_height/2, _width, _height);
+      //   //let's try the right side of the building
+      //   fill(113, 44, 114);
+      //   quad(windowWidth/2+_width/2, windowHeight/2-_height/2,
+      //       windowWidth/2+_width/2 + 5, windowHeight/2-_height/2+20,
+      //       windowWidth/2+_width/2 + 5, windowHeight/2+_height/2-20,
+      //       windowWidth/2+_width/2, windowHeight/2+_height/2,
+      //   );
+      //
+      //   //let's do some windows
+      //   fill(157, 64, 121);
+      //   for(var i=_windowSize; i<_width-_windowSize*2; i+= _windowSize*2){
+      //     for(var j=_windowSize; j<_height-_windowSize*6; j+= _windowSize*3){
+      //       if(random()>1){
+      //         rect(windowWidth/2-_width/2 + i, windowHeight/2-_height/2+_windowSize +j, _windowSize, _windowSize );
+      //       }
+      //     }
+      //   }
+      //
+      // }
       function draw() {
+        background(157, 64, 121);
+        // fill(31, 12, 83);
+        // horizon(25, windowHeight/2);
+        // fill(100, 24, 81);
+        // horizon(50, windowHeight/2+75);
+
+        drawMountain();
+
         if(millis() > previousTime + refreshTime ){
-          background(157, 64, 121);
-          // fill(31, 12, 83);
-          // horizon(25, windowHeight/2);
-          // fill(100, 24, 81);
-          // horizon(50, windowHeight/2+75);
-          drawBuilding();
+
+        //  drawBuilding();
+          bbb.reroll();
           previousTime = millis();
         }
+                bbb.draw();
         //
         // //cloud from the right
         // fill(20,255,125, 1);
